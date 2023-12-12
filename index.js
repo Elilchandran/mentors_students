@@ -34,6 +34,9 @@ process.on('SIGINT', () => {
 // Enable CORS
 app.use(cors());
 
+// Use express.json() middleware to parse JSON requests
+app.use(express.json());
+
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -80,10 +83,14 @@ app.post('/api/students', async (req, res) => {
 });
 
 // Assigning a student to a mentor
-app.put('/api/assign/:mentorId/:studentId', async (req, res) => {
+// Assigning a student to a mentor
+app.put('/api/assign', async (req, res) => {
     try {
-        const mentor = await Mentor.findById(req.params.mentorId);
-        const student = await Student.findById(req.params.studentId);
+        const mentorId = req.body.mentorId;
+        const studentId = req.body.studentId;
+
+        const mentor = await Mentor.findById(mentorId);
+        const student = await Student.findById(studentId);
 
         mentor.students.push(student._id);
         student.mentor = mentor._id;
@@ -97,6 +104,7 @@ app.put('/api/assign/:mentorId/:studentId', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 //Showing students for a particular mentor
 app.get('/api/mentors/:mentorId/students', async (req, res) => {
