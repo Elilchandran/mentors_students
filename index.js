@@ -39,6 +39,7 @@ app.use(express.json());
 
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
+
 //commonly used for parsing data from HTML forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -83,7 +84,6 @@ app.post('/api/students', async (req, res) => {
     res.json(student);
 });
 
-// Assigning a student to a mentor
 // Assigning a student to a mentor
 app.put('/api/assign', async (req, res) => {
     try {
